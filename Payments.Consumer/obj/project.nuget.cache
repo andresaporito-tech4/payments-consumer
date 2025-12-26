@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "aQ2BR/Xh9N8=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Matheus\\Documents\\Saporito\\payments-consumer\\Payments.Consumer\\Payments.Consumer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Matheus\\.nuget\\packages\\dapper\\2.1.66\\dapper.2.1.66.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\9.0.0\\microsoft.extensions.dependencyinjection.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\9.0.0\\microsoft.extensions.logging.abstractions.9.0.0.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\npgsql\\10.0.0\\npgsql.10.0.0.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\rabbitmq.client\\7.2.0\\rabbitmq.client.7.2.0.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\system.io.pipelines\\8.0.0\\system.io.pipelines.8.0.0.nupkg.sha512",
+    "C:\\Users\\Matheus\\.nuget\\packages\\system.threading.ratelimiting\\8.0.0\\system.threading.ratelimiting.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

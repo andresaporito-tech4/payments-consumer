@@ -1,0 +1,17 @@
+services:
+  payments-consumer:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: payments-consumer
+    networks:
+      - monitoring_network
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    restart: unless-stopped
+
+networks:
+  monitoring_network:
+    external: true
