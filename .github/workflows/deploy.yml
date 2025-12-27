@@ -11,36 +11,46 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # ---------------------------------------
+      # ---------------------------------------------------
       # 1️⃣ Checkout do código
-      # ---------------------------------------
+      # ---------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ---------------------------------------
-      # 2️⃣ Debug do workspace (IMPORTANTE)
-      # ---------------------------------------
-      - name: Debug workspace
+      # ---------------------------------------------------
+      # 2️⃣ Configurar kubeconfig (Docker Desktop)
+      # ---------------------------------------------------
+      - name: Configure kubeconfig
         shell: powershell
         run: |
-          Write-Host "Diretório atual:"
-          Get-Location
-          Write-Host ""
-          Write-Host "Conteúdo do workspace:"
-          Get-ChildItem -Recurse -Depth 2
+          $source = "C:\Users\Matheus\.kube\config"
+          $targetDir = "C:\actions-runner-payments-consumer\_kube"
+          $target = "$targetDir\config"
 
-      # ---------------------------------------
+          if (-not (Test-Path $source)) {
+            Write-Error "❌ kubeconfig não encontrado em $source"
+            exit 1
+          }
+
+          New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
+          Copy-Item $source $target -Force
+
+          "KUBECONFIG=$target" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "✅ KUBECONFIG configurado em $target"
+
+      # ---------------------------------------------------
       # 3️⃣ Validar Docker e Kubernetes
-      # ---------------------------------------
+      # ---------------------------------------------------
       - name: Validate Docker and Kubernetes
         shell: powershell
         run: |
           docker info
           kubectl cluster-info
+          kubectl get nodes
 
-      # ---------------------------------------
+      # ---------------------------------------------------
       # 4️⃣ Build da imagem Docker (LOCAL)
-      # ---------------------------------------
+      # ---------------------------------------------------
       - name: Build Docker image
         shell: powershell
         run: |
@@ -49,17 +59,17 @@ jobs:
             -f Payments.Consumer/dockerfile `
             .
 
-      # ---------------------------------------
+      # ---------------------------------------------------
       # 5️⃣ Deploy no Kubernetes
-      # ---------------------------------------
+      # ---------------------------------------------------
       - name: Deploy to Kubernetes
         shell: powershell
         run: |
           kubectl apply -f .\k8s -n fiap-cloud-games
 
-      # ---------------------------------------
+      # ---------------------------------------------------
       # 6️⃣ Verificação final
-      # ---------------------------------------
+      # ---------------------------------------------------
       - name: Verify deployment
         shell: powershell
         run: |
