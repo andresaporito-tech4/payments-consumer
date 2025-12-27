@@ -1,0 +1,67 @@
+name: Deploy Payments Consumer
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build and Deploy Payments Consumer
+    runs-on: self-hosted
+
+    steps:
+      # ---------------------------------------
+      # 1️⃣ Checkout do código
+      # ---------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ---------------------------------------
+      # 2️⃣ Debug do workspace (IMPORTANTE)
+      # ---------------------------------------
+      - name: Debug workspace
+        shell: powershell
+        run: |
+          Write-Host "Diretório atual:"
+          Get-Location
+          Write-Host ""
+          Write-Host "Conteúdo do workspace:"
+          Get-ChildItem -Recurse -Depth 2
+
+      # ---------------------------------------
+      # 3️⃣ Validar Docker e Kubernetes
+      # ---------------------------------------
+      - name: Validate Docker and Kubernetes
+        shell: powershell
+        run: |
+          docker info
+          kubectl cluster-info
+
+      # ---------------------------------------
+      # 4️⃣ Build da imagem Docker (LOCAL)
+      # ---------------------------------------
+      - name: Build Docker image
+        shell: powershell
+        run: |
+          docker build `
+            -t payments-consumer:latest `
+            -f Payments.Consumer/dockerfile `
+            .
+
+      # ---------------------------------------
+      # 5️⃣ Deploy no Kubernetes
+      # ---------------------------------------
+      - name: Deploy to Kubernetes
+        shell: powershell
+        run: |
+          kubectl apply -f .\k8s -n fiap-cloud-games
+
+      # ---------------------------------------
+      # 6️⃣ Verificação final
+      # ---------------------------------------
+      - name: Verify deployment
+        shell: powershell
+        run: |
+          kubectl get pods -n fiap-cloud-games
+          kubectl get deployments -n fiap-cloud-games
