@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       # ---------------------------------------------------
-      # 2️⃣ Configurar kubeconfig (Docker Desktop)
+      # 2️⃣ Configurar kubeconfig (PADRÃO QUE FUNCIONA)
       # ---------------------------------------------------
       - name: Configure kubeconfig
         shell: powershell
@@ -45,11 +45,13 @@ jobs:
         shell: powershell
         run: |
           docker info
+          kubectl version --client
           kubectl cluster-info
           kubectl get nodes
 
       # ---------------------------------------------------
-      # 4️⃣ Build da imagem Docker (LOCAL)
+      # 4️⃣ Build da imagem Docker (SEM MEXER NO DOCKERFILE)
+      #    👉 CONTEXTO CORRETO
       # ---------------------------------------------------
       - name: Build Docker image
         shell: powershell
@@ -57,7 +59,7 @@ jobs:
           docker build `
             -t payments-consumer:latest `
             -f Payments.Consumer/dockerfile `
-            .
+            Payments.Consumer
 
       # ---------------------------------------------------
       # 5️⃣ Deploy no Kubernetes
