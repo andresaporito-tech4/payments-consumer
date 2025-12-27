@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-consumer
+  namespace: fiap-cloud-games
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-consumer
+  template:
+    metadata:
+      labels:
+        app: payments-consumer
+    spec:
+      containers:
+        - name: payments-consumer
+          image: payments-consumer:latest
+          imagePullPolicy: IfNotPresent
+
+          envFrom:
+            - configMapRef:
+                name: payments-consumer-config
+            - secretRef:
+                name: payments-consumer-secret
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - ps aux | grep dotnet
+            initialDelaySeconds: 30
+            periodSeconds: 30
