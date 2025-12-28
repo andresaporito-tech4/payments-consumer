@@ -4,8 +4,4 @@ metadata:
   name: payments-consumer-config
   namespace: fiap-cloud-games
 data:
-  ASPNETCORE_ENVIRONMENT: Production
-
-  RABBITMQ_HOST: rabbitmq
-  RABBITMQ_PORT: "5672"
-  RABBITMQ_QUEUE: payments
+  ASPNETCORE_ENVIRONMENT: "Production"
